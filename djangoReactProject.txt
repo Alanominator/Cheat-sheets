@@ -3,6 +3,14 @@ ___________________________________________
 
 (((
 
+''' javascript
+
+for (let x; x < someArray.length; x++){
+	console.log(x**2)
+}
+
+'''
+
 # preparing the tools
 
 > sudo apt install .......
