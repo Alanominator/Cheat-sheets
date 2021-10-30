@@ -1,131 +1,94 @@
-# creating a django-react project with postgresql database on linux
-___________________________________________
+# creating a djangoReactProject ( on linux )
+______
 
-(((
+### preparing the tools
 
-
-# preparing the tools
-
-> sudo apt install .......
+> sudo apt install ....... ?
 
 > sudo apt-get install python3-venv
 > ...
-
-)))
 ___________________________________________
 
-# creating virtual environment
+### creating virtual environment
 
 > python3 -m venv myenv
 
 > . myenv/bin/activate
 
->(myenv) touch requirements.txt
+### creating a file with reauirements for pip
+
+> touch requirements.txt
 
 _______
 
-# in requirements.txt write the packages you need
+#### in requirements.txt write the packages you need
 
 django
 pillow
-psycopg2-binary 
-psycopg2
 djangorestframework
-
 _______
 
->(myenv) pip install -r requirements.txt
-
-# then just create a django project
-
->(myenv) django-admin startproject project_name
+> pip3 install -r requirements.txt
 _______
 
-# then create a database
+### then just create a django project
 
->(myenv) sudo apt-get install libpq-dev python-dev
->(myenv) sudo pip install psycopg2
+> django-admin startproject project_name
+_______
 
-# open console postgresql
->(myenv) sudo -u postgres psql postgres
+### create app api
 
-(((
+> cd project_name
+> python3 manage.py startapp api
 
-# create a password
+### create app frontend
 
-postgres=#  \password postgres
+> python3 manage.py startapp frontend
 
-postgres=#  create user user_name with password 'password';
-    alter role user_name set client_encoding to 'utf8';
-    alter role user_name set default_transaction_isolation to 'read committed';
-    alter role user_name set timezone to 'UTC';
 
-)))
+____
 
-# create database
-
-postgres=# create database django_db owner user_name;
-
-# quit
-
-postgres=#  \q
-
-________
-
-# open settings in your project
-
-        'NAME': 'django_db',
-        'USER' : 'user_name',
-        'PASSWORD' : 'password',
-        'HOST' : '127.0.0.1',
-        'PORT' : '5432',
-
-# make migrations
-
->(myenv) python3 manage.py makemigrations
-...
->(myenv) python3 manage.py migrate
-
-___________________________________________
-
-# create app api
-
->(myenv) cd project_name
->(myenv) python3 manage.py startapp api
-
-# add this to INSTALLED_APPS in settings
-
+### add the following to INSTALLED_APPS in settings
+```python
     "rest_framework",
     "api.apps.ApiConfig",
-
-# create serializers.py in api
-
-___________________________________________
-
-# now create frontend app
-
->(myenv) cd project_name
->(myenv) python3 manage.py startapp frontend
-
-
-# open settings in project_name, add this code to INSTALLED_APPS to registrate this app
-
     "frontend.apps.FrontendConfig",
+```
 
-
->(myenv) cd frontend
->(myenv) mkdir static src templates
-
->(myenv) cd static
->(myenv) mkdir frontend css images
-
->(myenv) cd src
->(myenv) mkdir components
-
+### cd project_name/api
+___
+> touch serializers.py
 ___________________________________________
 
->(myenv) cd frontend
+.
+___
+#### cd frontend
+>  mkdir static src templates
+> touch babel.config.json   webpack.config.js
+___
+.
+___
+#### cd static
+> mkdir frontend css images
+___
+.
+___
+#### cd frontend/src
+> mkdir components
+> touch index.js
+___
+.
+.
+___________________________________________
+### Let's install some packages
 
+### but before do some things to avoid some problems
+___
+#### cd frontend
+> npm config set proxy null
+> npm config set https-proxy null
+> npm config set registry http://registry.npmjs.org/
+___
 > npm init -y
 
 > npm i webpack webpack-cli --save-dev
@@ -141,13 +104,10 @@ ___________________________________________
 > npm install react-router-dom
 
 > npm install @material-ui/icons
+____
 
-
-_______
-
-in frontend create " babel.config.json "
-
-in " babel.config.json " write this:
+.
+### in " frontend/babel.config.json " add this code
 
 ```javascript
 
@@ -165,16 +125,12 @@ in " babel.config.json " write this:
   ],
   "plugins": ["@babel/plugin-proposal-class-properties"]
 }
-
-
 ```
-_______
 
 
-in frontend create " webpack.config.js " and in this file add the following:
+### in " frontend/webpack.config.js " add in this code:
 
 ```javascript
-
 const path = require("path");
 const webpack = require("webpack");
 
@@ -207,60 +163,72 @@ module.exports = {
     }),
   ],
 };
-
-
 ```
 
-# open package.json in frontend and replace code in "scripts" : { } with this code
+### open frontend/package.json replace the code in "scripts" : { } with this code
 
 ```javascript
-
     "dev": "webpack --mode development --watch",
     "build":"webpack --mode production"
-
-
 ```
 ___________________________________________
 
-in frontend/src create a file " index.js "
 
-inside frontend/templates create a folder " frontend " 
-in frontend/templates/frontend create a file " index.html " and make a simple html structure
+### cd frontend/templates create a folder " frontend "
+___
+> mkdir frontend
+___
+### cd frontend/templates/frontend
+___
+> touch index.html
+___
+### in this file ( frontend/templates/frontend/index.html ) write this
 
-in head add
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     {% load static %}
-    ( jquery , ajax, google fonts )
+</head>
 
-in body create div with id="main" . in #main create #app
+<body>
+    <div id="main">
+        <div id="app">
+            
+        </div>
+    </div>
 
-and script
+    <script src="{% static  'frontend/main.js' %}"></script>
+</body>
 
-<script src='{% static "frontend/main.js" %}'></script>
-
+</html>
+```
 ___________________________________________
 
-in frontend/views.py make a function
+### in frontend/views.py make a function
 
 ```python
 
 def index(request, *args, **kwargs):
     return render(request, "frontend/index.html")
-
+    
 ```
 ________
 
-in frontend create " urls.py " and add:
+### in frontend create " urls.py " and add:
 
 ```python
-
 from django.urls import path
 from .views import index
 
 urlpatterns = [
     path('', index),
 ]
-
-
 ```
 connect it with urls in project_name
 
