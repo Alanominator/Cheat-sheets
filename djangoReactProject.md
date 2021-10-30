@@ -3,13 +3,6 @@ ___________________________________________
 
 (((
 
-```javascript
-
-for (let x; x < someArray.length; x++){
-	console.log(x**2)
-}
-
-```
 
 # preparing the tools
 
@@ -133,20 +126,30 @@ ___________________________________________
 
 >(myenv) cd frontend
 
->(myenv) npm init -y
->(myenv) npm i webpack webpack-cli --save-dev
->(myenv) npm i @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
->(myenv) npm i react react-dom --save-dev
->(myenv) npm install @material-ui/core
->(myenv) npm install @babel/plugin-proposal-class-properties
->(myenv) npm install react-router-dom
->(myenv) npm install @material-ui/icons
+> npm init -y
+
+> npm i webpack webpack-cli --save-dev
+
+> npm i @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
+
+> npm i react react-dom --save-dev
+
+> npm install @material-ui/core
+
+> npm install @babel/plugin-proposal-class-properties
+
+> npm install react-router-dom
+
+> npm install @material-ui/icons
+
 
 _______
 
 in frontend create " babel.config.json "
 
 in " babel.config.json " write this:
+
+```javascript
 
 {
   "presets": [
@@ -163,9 +166,14 @@ in " babel.config.json " write this:
   "plugins": ["@babel/plugin-proposal-class-properties"]
 }
 
+
+```
 _______
 
+
 in frontend create " webpack.config.js " and in this file add the following:
+
+```javascript
 
 const path = require("path");
 const webpack = require("webpack");
@@ -201,11 +209,17 @@ module.exports = {
 };
 
 
+```
+
 # open package.json in frontend and replace code in "scripts" : { } with this code
+
+```javascript
 
     "dev": "webpack --mode development --watch",
     "build":"webpack --mode production"
 
+
+```
 ___________________________________________
 
 in frontend/src create a file " index.js "
@@ -227,12 +241,17 @@ ___________________________________________
 
 in frontend/views.py make a function
 
+```python
+
 def index(request, *args, **kwargs):
     return render(request, "frontend/index.html")
 
+```
 ________
 
 in frontend create " urls.py " and add:
+
+```python
 
 from django.urls import path
 from .views import index
@@ -241,6 +260,8 @@ urlpatterns = [
     path('', index),
 ]
 
+
+```
 connect it with urls in project_name
 
     path('', include('frontend.urls')),
