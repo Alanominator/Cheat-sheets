@@ -1,4 +1,4 @@
-# creating a djangoReactProject ( on linux )
+# Creating a skeleton of djangoReactProject ( on linux )
 ______
 
 ### preparing the tools
@@ -77,7 +77,10 @@ ___
 > mkdir components
 > touch index.js
 ___
-.
+___
+#### cd frontend/src/components
+> touch App.js
+___
 .
 ___________________________________________
 ### Let's install some packages
@@ -230,15 +233,26 @@ urlpatterns = [
     path('', index),
 ]
 ```
-connect it with urls in project_name
+### in api create " urls.py " ;
 
+### connect these urls with the main urls in " project_name/urls "
+
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')),
     path('', include('frontend.urls')),
-
-________
-
-
-Done! Goodluck!
-
-# now you can create your first component
-
-in frontend/src/components make " App.js "
+]
+```
+### make your first migrations
+___
+### cd project_name
+> python3 manage.py makemigrations
+> python3 manage.py migrate
+___
+.
+# Done! Goodluck!
