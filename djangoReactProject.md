@@ -97,6 +97,7 @@ ___
 > npm i react react-dom --save-dev
 ______ 
 > npm install sass-loader sass webpack --save-dev
+> npm install style-loader css-loader --save
 > npm install @material-ui/core
 > npm install @babel/plugin-proposal-class-properties
 > npm install react-router-dom
@@ -205,9 +206,9 @@ ___
 </head>
 
 <body>
-        <div id="root">
-            
-        </div>
+    <div id="root">
+        
+    </div>
     <script src="{% static 'frontend/main.js' %}"></script>
 </body>
 
@@ -256,5 +257,34 @@ ___
 > python3 manage.py makemigrations
 > python3 manage.py migrate
 ___
+
+### for now add this code in "frontend/src/index.js"
+
+```javascript
+import React from 'react';
+import ReactDOM from "react-dom";
+import App from "./App";
+import "./styles/index.scss";
+
+ReactDOM.render(
+    <App />,
+    document.getElementById("root")
+);
+```
+### in "frontend/src/App.js" add this:
+```javascript
+import React from 'react';
+
+const App = () => {
+    return (
+        <div>
+            Congratulatiions!
+        </div>
+    );
+};
+
+export default App;
+```
+
 .
 # Done! Goodluck!
