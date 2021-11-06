@@ -75,11 +75,7 @@ ___
 ___
 #### cd frontend/src
 > mkdir components
-> touch index.js
-___
-___
-#### cd frontend/src/components
-> touch App.js
+> touch App.js index.js
 ___
 .
 ___________________________________________
@@ -90,23 +86,20 @@ ___
 #### cd frontend
 > npm config set proxy null
 > npm config set https-proxy null
-> npm config set registry http://registry.npmjs.org/
+> npm config set registry https://registry.npmjs.org/
+> npm cache clean --force
+> npm cache verify
+_____
 ___
 > npm init -y
-
 > npm i webpack webpack-cli --save-dev
-
 > npm i @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
-
 > npm i react react-dom --save-dev
-> 
-
+______ 
+> npm install sass-loader sass webpack --save-dev
 > npm install @material-ui/core
-
 > npm install @babel/plugin-proposal-class-properties
-
 > npm install react-router-dom
-
 > npm install @material-ui/icons
 ____
 
@@ -139,33 +132,44 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: "./src/index.js",
-  output: {
-    path: path.resolve(__dirname, "./static/frontend"),
-    filename: "[name].js",
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-        },
-      },
+    entry: "./src/index.js",
+    output: {
+        path: path.resolve(__dirname, "./static/frontend"),
+        filename: "[name].js",
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                },
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    // Creates `style` nodes from JS strings
+                    "style-loader",
+                    // Translates CSS into CommonJS
+                    "css-loader",
+                    // Compiles Sass to CSS
+                    "sass-loader",
+                ],
+            },
+        ],
+    },
+    optimization: {
+        minimize: true,
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            "process.env": {
+                // This has effect on the react lib size
+                NODE_ENV: JSON.stringify("development"),
+            },
+        }),
     ],
-  },
-  optimization: {
-    minimize: true,
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      "process.env": {
-        // This has effect on the react lib size
-        NODE_ENV: JSON.stringify("production"),
-      },
-    }),
-  ],
 };
 ```
 
@@ -189,6 +193,7 @@ ___
 ### in this file ( frontend/templates/frontend/index.html ) write this
 
 ```html
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -196,18 +201,14 @@ ___
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    {% load static %}
+    <title>DjangoReactProject</title>
 </head>
 
 <body>
-    <div id="main">
-        <div id="app">
+        <div id="root">
             
         </div>
-    </div>
-
-    <script src="{% static  'frontend/main.js' %}"></script>
+    <script src="{% static 'frontend/main.js' %}"></script>
 </body>
 
 </html>
