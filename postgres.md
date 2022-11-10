@@ -21,6 +21,12 @@ ___
 sudo --login -u postgres
 ```
 
+## hekp
+```
+psql --help
+```
+
+
 ## - Open ..
 ```
 psql
